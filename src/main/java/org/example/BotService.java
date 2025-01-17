@@ -91,13 +91,16 @@ public class BotService {
                         SendResponse execute = bot.execute(message);
                         user.setMessageId(execute.message().messageId());
                     }else {
-                        user.setChosenAlbumId(Integer.parseInt(data));
-                        bot.execute(new DeleteMessage(chatId, user.getMessageId()));
-                        SendMessage message = new SendMessage(chatId,"Photos: ");
-                        message.replyMarkup(generateMarkUpForPhotos(user.getChosenAlbumId()));
-                        user.setState(State.PHOTOS);
-                        SendResponse execute = bot.execute(message);
-                        user.setMessageId(execute.message().messageId());
+                        if(!(data.equals("album"))){
+                            user.setChosenAlbumId(Integer.parseInt(data));
+                            bot.execute(new DeleteMessage(chatId, user.getMessageId()));
+                            SendMessage message = new SendMessage(chatId,"Photos: ");
+                            message.replyMarkup(generateMarkUpForPhotos(user.getChosenAlbumId()));
+                            user.setState(State.PHOTOS);
+                            SendResponse execute = bot.execute(message);
+                            user.setMessageId(execute.message().messageId());
+                        }
+
                     }
                 }else if (user.getState().equals(State.PHOTOS)) {
                     if (data.equals("back")){
